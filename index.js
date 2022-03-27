@@ -1,4 +1,4 @@
-const base = "https://api.affiliateplus.xyz/api";
+const base = "http://api.brainshop.ai";
 const translatte = require("translatte");
 const superagent = require("superagent");
 /**
@@ -20,24 +20,24 @@ class Client {
                     resolve(
                         (
                             await superagent
-                                .get(`${base}/chatbot?${new URLSearchParams(ops).toString()}`)
+                                .get(`${base}/get?bid=165091&key=Mvi4NSxEtV33aSoC&uid=kiritod&${new URLSearchParams(ops).toString()}`)
                                 .type("json")
                                 .accept("json")
-                        ).body.message
+                        ).body.cnt
                     );
                 } else {
                     translatteoptions.to = "en";
-                    const translatedQuestion = await translatte(ops.message, translatteoptions).catch((e) => {
+                    const translatedQuestion = await translatte(ops.msg, translatteoptions).catch((e) => {
                         reject(e);
                     });
-                    ops.message = translatedQuestion.text;
+                    ops.msg = translatedQuestion.text;
 
                     const englishResponse = (
                         await superagent
-                            .get(`${base}/chatbot?${new URLSearchParams(ops).toString()}`)
+                            .get(`${base}/get?bid=165091&key=Mvi4NSxEtV33aSoC&uid=kiritod&${new URLSearchParams(ops).toString()}`)
                             .type("json")
                             .accept("json")
-                    ).body.message;
+                    ).body.cnt;
 
                     translatteoptions.to = language;
                     const translatedResponse = await translatte(englishResponse, translatteoptions).catch((e) => {
@@ -134,7 +134,7 @@ class Client {
      **/
     chat(
         ops = {
-            message,
+            msg,
             name: "SmartestChatbot",
             master: "Lebyy_Dev",
             user: 1,
@@ -215,7 +215,7 @@ class Client {
         translatteoptions = {}
     ) {
         return new Promise(async (resolve, reject) => {
-            if (!ops.message) reject("No message was provided");
+            if (!ops.msg) reject("No message was provided");
             for (const key in ops) {
                 if (key !== "user" && ops[key] && typeof ops[key] !== "string") reject(`${key} must be a string!`);
                 else if (key === "user" && typeof ops[key] !== "number" && typeof ops[key] !== "bigint" && typeof ops[key] !== "string") reject(`${key} must be a number / bigint / string!`);
